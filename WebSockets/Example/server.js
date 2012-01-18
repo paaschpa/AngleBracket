@@ -20,8 +20,8 @@
   io.sockets.on('connection', function(socket) {
     var checkForName, userName;
     util.puts('>> client Connected');
-    socket.send('Welcome to the awesome chat server.');
-    socket.send(' Please Enter Your Name');
+    //socket.send('Welcome to the awesome chat server.');
+    //socket.send(' Please Enter Your Name');
     userName = void 0;
     checkForName = function(userNameInput) {
       if (userName === void 0) {
@@ -35,14 +35,16 @@
       //checkForName(message);
       socket.send('echo: ' + message);
     });
-    
+   
+    var cheats = []; 
     socket.on('message', function(message) {
-      var chatMessage;
-      util.puts('>> message called: ' + message);
-      checkForName(message);
-      chatMessage = userName + ': ' + message;
-      io.sockets.emit('message', chatMessage);
+    	if (message.id == 0 ) {
+      		message.id = cheats.length + 1;
+		cheats.push(message);
+      	} 
+      	io.sockets.emit('message', cheats);
     });
+
     return socket.on('disconnect', function() {
       util.puts('>> disconnect called');
       io.sockets.emit('message', 'i am outty');
